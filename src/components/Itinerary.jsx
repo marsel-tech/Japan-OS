@@ -17,10 +17,24 @@ function Itinerary() {
 
 const todayTripDate = getTodayTripDate();
   const [itinerary, setItinerary] = useState(() => {
-    const saved = localStorage.getItem("japan-itinerary-v1");
+  const saved = localStorage.getItem("japan-itinerary-v1");
 
-    return saved ? JSON.parse(saved) : initialItinerary;
-  });
+  if (!saved) {
+    return initialItinerary;
+  }
+
+  try {
+    const parsed = JSON.parse(saved);
+
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      return initialItinerary;
+    }
+
+    return parsed;
+  } catch {
+    return initialItinerary;
+  }
+});
 
   // =============================
   // Toggle Checklist
